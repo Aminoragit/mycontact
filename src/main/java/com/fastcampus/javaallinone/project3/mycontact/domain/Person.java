@@ -1,11 +1,11 @@
 package com.fastcampus.javaallinone.project3.mycontact.domain;
 
-import com.sun.istack.NotNull;
 import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import java.time.LocalDate;
 
 //@RequiredArgsConstructor //Notnull 이여야하는 요소들 @Nonnull
@@ -35,12 +35,17 @@ public class Person {
 
     @NonNull
     private String bloodType;
+
     private String address;
     private LocalDate birthday;
     private String job;
 
     @ToString.Exclude
     private String phoneNumber;
+
+    @OneToOne
+    private Block block;
+
 
 
 
