@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,4 +32,15 @@ class PersonRepositoryTest {
         assertThat(people.get(0).getBloodType()).isEqualTo("A");
 
     }
+
+   @Test
+    void hashCodeAndEquals(){
+       Person person1= new Person("martin",10);
+       Person person2= new Person("martin",10);
+
+       System.out.println(person1.equals(person2)); //Person에서 입력한 equals에 의해 값이 동일한지 확인
+       System.out.println(person1.hashCode()); //값은 동일하지만 hashcode는 다르다는걸 알수 있다.
+       System.out.println(person2.hashCode());
+
+   }
 }
