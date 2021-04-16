@@ -1,12 +1,9 @@
 package com.fastcampus.javaallinone.project3.mycontact.domain;
 
+import com.fastcampus.javaallinone.project3.mycontact.domain.dto.Birthday;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import java.time.LocalDate;
+import javax.persistence.*;
 
 //@RequiredArgsConstructor //Notnull 이여야하는 요소들 @Nonnull
 //@ToString //요소 추가시 자동으로 print 해주는 것에 추가해줌
@@ -37,35 +34,21 @@ public class Person {
     private String bloodType;
 
     private String address;
-    private LocalDate birthday;
+
+    @Embedded
+    private Birthday birthday;
+
     private String job;
 
     @ToString.Exclude
     private String phoneNumber;
 
-    @OneToOne
+    //cascade 폭포수 Person엔티티에서 Block에 대한 영속성을 함께 관리
+    //CascadeType.ALL={CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE}
+    //Block을 null로 해제했는데도 block리스트에 남아있는 엔티티를 자동으로 제거해주기--orphanRemoval = true
+    //fetch-> EAGER타입
+    @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
+    @ToString.Exclude //불필요한 쿼리 호출을 자동제거
     private Block block;
 
-
-
-
-//    public boolean equals(Object object) {
-//        if (object == null) {
-//            return false;
-//        }
-//        Person person = (Person) object;
-//
-//        if (!person.getName().equals(this.getName())) {
-//            return false;
-//        }
-//
-//        if (person.getAge() != this.getAge()) {
-//            return false;
-//        }
-//        return true;
-//    }
-//
-//    public int hashCode(){
-//        return (name+age).hashCode();
-//    }
 }

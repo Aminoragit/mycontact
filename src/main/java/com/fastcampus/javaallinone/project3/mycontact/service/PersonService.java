@@ -1,34 +1,41 @@
 package com.fastcampus.javaallinone.project3.mycontact.service;
 
-import com.fastcampus.javaallinone.project3.mycontact.domain.Block;
 import com.fastcampus.javaallinone.project3.mycontact.domain.Person;
-import com.fastcampus.javaallinone.project3.mycontact.repository.BlockRepository;
 import com.fastcampus.javaallinone.project3.mycontact.repository.PersonRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class PersonService {
     @Autowired
     private PersonRepository personRepository;
 
-    @Autowired
-    private BlockRepository blockRepository;
-
     public List<Person> getPeopleExcludeBlocks(){
-        List<Person> people = personRepository.findAll();
-//        List<Block> blocks = blockRepository.findAll();
-//        List<String> blockNames=blocks.stream().map(Block::getName).collect(Collectors.toList());
+        return personRepository.findByBlockIsNull();
+    }
 
-        //filter -> 어떤 조건에 일치하는것만 return
-        //blockNames안에 person.getName()이 있을때는 ! 제외)
-        //나머지 person값만 return
-//        return people.stream().filter(person->!blockNames.contains(person.getName())).collect(Collectors.toList());
+    public List<Person> getPeopleByName(String name){
+        //Repository에 findByName을 작성하면 간편하게 작성 가능
+        //        List<Person> people = personRepository.findAll();
+        //        return people.stream().filter(person->person.getName().equals(name)).collect(Collectors.toList());
 
-        return people.stream().filter(person -> person.getBlock() == null).collect(Collectors.toList());
+        return personRepository.findByName(name);
+    }
 
+
+
+    @Transactional(readOnly = true)
+    public Person getPerson(Long id){
+        Person person = personRepository.findById(id).get();
+        System.out.println("person : " + person);
+
+        //sout은 모든 실행을 다 보여주지만 log는 원하는것만 표시해준다.
+        log.info("person: {}",person);
+        return person;
     }
 }
