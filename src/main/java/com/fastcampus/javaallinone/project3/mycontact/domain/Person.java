@@ -4,6 +4,9 @@ import com.fastcampus.javaallinone.project3.mycontact.domain.dto.Birthday;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 
 //@RequiredArgsConstructor //Notnull 이여야하는 요소들 @Nonnull
 //@ToString //요소 추가시 자동으로 print 해주는 것에 추가해줌
@@ -23,18 +26,24 @@ public class Person {
     private Long id;
 
     @NonNull
+    @NotEmpty
+    @Column(nullable = false)
     private String name;
 
     @NonNull
+    @Min(1)
     private int age;
 
     private String hobby;
 
     @NonNull
+    @NotEmpty
+    @Column(nullable = false)
     private String bloodType;
 
     private String address;
 
+    @Valid
     @Embedded
     private Birthday birthday;
 

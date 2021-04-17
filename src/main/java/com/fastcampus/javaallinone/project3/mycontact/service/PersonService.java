@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -40,5 +39,10 @@ public class PersonService {
         //sout은 모든 실행을 다 보여주지만 log는 원하는것만 표시해준다.
         log.info("person: {}",person);
         return person;
+    }
+
+    @Transactional
+    public void put(Person person) {
+        personRepository.save(person);
     }
 }
