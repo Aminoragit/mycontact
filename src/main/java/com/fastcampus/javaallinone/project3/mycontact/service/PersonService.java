@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -31,8 +32,10 @@ public class PersonService {
 
     @Transactional(readOnly = true)
     public Person getPerson(Long id){
-        Person person = personRepository.findById(id).get();
-        System.out.println("person : " + person);
+//        Person person = personRepository.findById(id).get();
+        Person person = personRepository.findById(id).orElse(null);
+
+
 
         //sout은 모든 실행을 다 보여주지만 log는 원하는것만 표시해준다.
         log.info("person: {}",person);
