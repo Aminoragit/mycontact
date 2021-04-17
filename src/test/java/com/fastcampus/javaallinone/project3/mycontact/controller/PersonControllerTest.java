@@ -32,15 +32,6 @@ class PersonControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(personController).build();
 
     }
-
-    @Test
-    void getPerson() throws Exception {
-        mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/person/1"))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
-
     @Test
     void postPerson() throws Exception{
         mockMvc.perform(
@@ -52,6 +43,17 @@ class PersonControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated());
     }
+
+
+    @Test
+    void getPerson() throws Exception {
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/person/1"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+
 
 
     @Test
