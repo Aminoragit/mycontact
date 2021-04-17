@@ -64,4 +64,12 @@ public class PersonService {
         person.setName(name);
         personRepository.save(person);
     }
+
+    @Transactional
+    public void delete(Long id) {
+        //잘못된 request로 바로 delete하면 DB가 손상될수 있으니 deleted로 확인하고 db에 업로드하는 방식을 사용한다.
+        Person person = personRepository.findById(id).orElseThrow(() -> new RuntimeException("아이디가 존재하지 않습니다."));
+        person.setDeleted(true);
+        personRepository.save(person);
+    }
 }

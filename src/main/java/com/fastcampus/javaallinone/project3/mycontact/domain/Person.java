@@ -3,6 +3,8 @@ package com.fastcampus.javaallinone.project3.mycontact.domain;
 import com.fastcampus.javaallinone.project3.mycontact.controller.dto.PersonDto;
 import com.fastcampus.javaallinone.project3.mycontact.domain.dto.Birthday;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Where;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
@@ -21,9 +23,10 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor //아무요소가 없는 생성자
 @RequiredArgsConstructor
 @AllArgsConstructor
-@Builder
 //모든 요소가 포함된 생성자
+@Where(clause = "deleted = false")
 public class Person {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -54,6 +57,12 @@ public class Person {
 
     @ToString.Exclude
     private String phoneNumber;
+
+    @ColumnDefault("0")
+    private boolean deleted;
+
+
+
 
     //cascade 폭포수 Person엔티티에서 Block에 대한 영속성을 함께 관리
     //CascadeType.ALL={CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE}
