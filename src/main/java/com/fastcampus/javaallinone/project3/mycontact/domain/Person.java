@@ -19,7 +19,7 @@ import javax.persistence.*;
 //모든 요소가 포함된 생성자
 public class Person {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NonNull
