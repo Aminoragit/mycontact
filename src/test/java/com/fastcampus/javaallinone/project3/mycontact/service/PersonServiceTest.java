@@ -26,9 +26,9 @@ class personServiceTest {
         personRepository.findAll().forEach(System.out::println);
 
         assertThat(result.size()).isEqualTo(3);
-        assertThat(result.get(0).getName()).isEqualTo("Martin");
-        assertThat(result.get(1).getName()).isEqualTo("David");
-        assertThat(result.get(2).getName()).isEqualTo("Benny");
+        assertThat(result.get(0).getName()).isEqualTo("martin");
+        assertThat(result.get(1).getName()).isEqualTo("david");
+        assertThat(result.get(2).getName()).isEqualTo("benny");
 
         // for each - 스트림 이용하는 방식: result 의 각 개체가 한줄씩 출력됨
 
@@ -39,16 +39,16 @@ class personServiceTest {
     @Test
     void getPeopleByName(){
 
-        List<Person> result = personService.getPeopleByName("Martin");
+        List<Person> result = personService.getPeopleByName("martin");
 
         assertThat(result.size()).isEqualTo(1);
-        assertThat(result.get(0).getName()).isEqualTo("Martin");
+        assertThat(result.get(0).getName()).isEqualTo("martin");
     }
 
     @Test
     void getPerson(){
         Person person = personService.getPerson(3L);
-        assertThat(person.getName()).isEqualTo("Dennis");
+        assertThat(person.getName()).isEqualTo("dennis");
     }
 
 }

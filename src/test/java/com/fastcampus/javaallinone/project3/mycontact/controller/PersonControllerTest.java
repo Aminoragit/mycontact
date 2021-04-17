@@ -2,8 +2,7 @@ package com.fastcampus.javaallinone.project3.mycontact.controller;
 
 import com.fastcampus.javaallinone.project3.mycontact.repository.PersonRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -17,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Slf4j
 @SpringBootTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PersonControllerTest {
 
     @Autowired
@@ -33,6 +33,7 @@ class PersonControllerTest {
 
     }
     @Test
+    @Order(1)
     void postPerson() throws Exception{
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/person")
@@ -46,6 +47,7 @@ class PersonControllerTest {
 
 
     @Test
+    @Order(2)
     void getPerson() throws Exception {
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/person/1"))
@@ -57,6 +59,7 @@ class PersonControllerTest {
 
 
     @Test
+    @Order(3)
     void modifyPerson() throws Exception{
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/api/person/1")
@@ -70,6 +73,7 @@ class PersonControllerTest {
     }
 
     @Test
+    @Order(4)
     void modifyName() throws Exception {
         mockMvc.perform(
                 MockMvcRequestBuilders.patch("/api/person/1")
@@ -79,6 +83,7 @@ class PersonControllerTest {
     }
 
     @Test
+    @Order(5)
     void deletePerson() throws Exception{
         mockMvc.perform(
                 MockMvcRequestBuilders.delete("/api/person/1"))
