@@ -11,6 +11,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -22,6 +23,7 @@ import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -39,18 +41,24 @@ class PersonControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private MappingJackson2HttpMessageConverter messageConverter;
+
+
+
+
     private MockMvc mockMvc;
 
     @BeforeEach
     void beforeEach(){
-        mockMvc = MockMvcBuilders.standaloneSetup(personController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(personController).setMessageConverters(messageConverter).build();
 
     }
     @Test
     @Order(1)
     void postPerson() throws Exception{
         mockMvc.perform(
-                MockMvcRequestBuilders.post("/api/person")
+            MockMvcRequestBuilders.post("/api/person")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content("{   \"name\": \"martin2\",\n" +
                                 "    \"age\": 20,\n" +
@@ -64,10 +72,20 @@ class PersonControllerTest {
     @Order(2)
     void getPerson() throws Exception {
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/person/1"))
-                .andDo(print())
-                .andExpect(status().isOk());
+            MockMvcRequestBuilders.get("/api/person/1"))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name").value("martin"))
+            .andExpect(jsonPath("hobby").isEmpty())
+            .andExpect(jsonPath("address").isEmpty())
+            .andExpect(jsonPath("$.birthday").value("1991-08-15"))
+            .andExpect(jsonPath("$.job").isEmpty())
+            .andExpect(jsonPath("$.phoneNumber").isEmpty())
+            .andExpect(jsonPath("$.deleted").value(false))
+            .andExpect(jsonPath("$.age").isNumber())
+            .andExpect(jsonPath("$.birthdayToday").isBoolean());
     }
+
 
 
 
@@ -95,7 +113,6 @@ class PersonControllerTest {
             ()-> assertThat(result.getBirthday()).isEqualTo(Birthday.of(LocalDate.now())),
             ()-> assertThat(result.getJob()).isEqualTo("programmer"),
             ()-> assertThat(result.getPhoneNumber()).isEqualTo("010-1111-2222")
-
         );
     }
 
