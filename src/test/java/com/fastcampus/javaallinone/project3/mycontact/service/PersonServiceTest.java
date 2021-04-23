@@ -2,10 +2,12 @@ package com.fastcampus.javaallinone.project3.mycontact.service;
 
 import com.fastcampus.javaallinone.project3.mycontact.controller.dto.PersonDto;
 import com.fastcampus.javaallinone.project3.mycontact.domain.Person;
+import com.fastcampus.javaallinone.project3.mycontact.domain.dto.Birthday;
 import com.fastcampus.javaallinone.project3.mycontact.repository.PersonRepository;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatcher;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -27,6 +30,7 @@ class personServiceTest {
     private PersonService personService;
     @Mock
     private PersonRepository personRepository;
+
 
 
     //Mock 테스트는 전부를 보는게 아니라 부분부분을 파트로 나눠서 디테일하게 테스트할수 있게해준다.
@@ -65,13 +69,64 @@ class personServiceTest {
 
     @Test
     void put(){
-        PersonDto dto=PersonDto.of("martin","programming","판교", LocalDate.now()
-        ,"programmer","010-1111-2222");
+//        PersonDto dto=PersonDto.of("martin","programming","판교", LocalDate.now()
+//        ,"programmer","010-1111-2222");
 
-        personService.put(dto);
+        personService.put(mockPersonDto());
 
         //Mock에서 save가 됬는지 확인하는법//times는 1번 실행됬는지 확인하느거
         //즉 위의 내용들(personService.put(dto)가 실행되서 personRepository.save()가 1번이상 실행되었는지 확인해서 알려주는것
         verify(personRepository,times(1)).save(any(Person.class));
     }
+
+    @Test
+    void modifyPersonNotFound(){
+        when(personRepository.findById(1L))
+                .thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class,()->personService.modify(1L,mockPersonDto()));
+    }
+
+    @Test
+    void modifyNameIsDifferent(){
+        when(personRepository.findById(1L))
+                .thenReturn(Optional.of(new Person("tony")));
+
+        assertThrows(RuntimeException.class,()->personService.modify(1L,mockPersonDto()));
+    }
+
+    @Test
+    void modify(){
+        when(personRepository.findById(1L))
+                .thenReturn(Optional.of(new Person("martin")));
+
+        personService.modify(1L,mockPersonDto());
+//        verify(personRepository,times(1)).save(any(Person.class));
+        //verify하는데 명확하게 알려줘서 동일한 정보가 실행됬는지 확인하는것
+        verify(personRepository,times(1)).save(argThat(new IsPersonWillBeUpdated()));
+    }
+
+    private static class IsPersonWillBeUpdated implements ArgumentMatcher<Person>{
+        @Override
+        public boolean matches(Person person){
+            return equals(person.getName(),"martin")
+                    && equals(person.getHobby(),"programming")
+                    && equals(person.getAddress(),"판교")
+                    && equals(person.getBirthday(),Birthday.of(LocalDate.now()))
+                    && equals(person.getJob(),"programmer")
+                    && equals(person.getPhoneNumber(),"010-1111-2222");
+        }
+        private boolean equals(Object actual, Object expected){
+            return expected.equals(actual);
+        }
+    }
+
+
+    private PersonDto mockPersonDto(){
+        return PersonDto.of("martin","programming","판교", LocalDate.now()
+                ,"programmer","010-1111-2222");
+
+    }
+
+
 }
