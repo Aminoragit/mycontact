@@ -1,3 +1,5 @@
 spring:
   jpa:
     show-sql: true
+  datasource:
+    sql-script-encoding: UTF-8
