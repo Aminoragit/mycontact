@@ -16,10 +16,6 @@ public class PersonService {
     @Autowired
     private PersonRepository personRepository;
 
-    public List<Person> getPeopleExcludeBlocks() {
-        return personRepository.findByBlockIsNull();
-    }
-
     public List<Person> getPeopleByName(String name) {
         //Repository에 findByName을 작성하면 간편하게 작성 가능
         //        List<Person> people = personRepository.findAll();

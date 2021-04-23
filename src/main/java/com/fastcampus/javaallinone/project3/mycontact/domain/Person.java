@@ -36,13 +36,8 @@ public class Person {
     @Column(nullable = false)
     private String name;
 
-
     private String hobby;
 
-    @NonNull
-    @NotEmpty
-    @Column(nullable = false)
-    private String bloodType;
 
     private String address;
 
@@ -52,31 +47,17 @@ public class Person {
 
     private String job;
 
-    @ToString.Exclude
     private String phoneNumber;
 
     @ColumnDefault("0")
     private boolean deleted;
 
 
-
-
-    //cascade 폭포수 Person엔티티에서 Block에 대한 영속성을 함께 관리
-    //CascadeType.ALL={CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE}
-    //Block을 null로 해제했는데도 block리스트에 남아있는 엔티티를 자동으로 제거해주기--orphanRemoval = true
-    //fetch-> EAGER타입
-    @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
-    @ToString.Exclude //불필요한 쿼리 호출을 자동제거
-    private Block block;
-
-
     public void set(PersonDto personDto){
         if(!StringUtils.isEmpty(personDto.getHobby())){
             this.setHobby(personDto.getHobby()); }
 
-        if(!StringUtils.isEmpty(personDto.getBloodType())){
-            this.setBloodType(personDto.getBloodType()); }
-        if(!StringUtils.isEmpty(personDto.getAddress())){
+         if(!StringUtils.isEmpty(personDto.getAddress())){
             this.setAddress(personDto.getAddress()); }
 
         if(!StringUtils.isEmpty(personDto.getJob())){
@@ -85,6 +66,9 @@ public class Person {
         if(!StringUtils.isEmpty(personDto.getPhoneNumber())){
             this.setPhoneNumber(personDto.getPhoneNumber()); }
 
+        if(personDto.getBirthday()!=null){
+            this.setBirthday(Birthday.of(personDto.getBirthday()));
+        }
     }
 
     public Integer getAge(){
