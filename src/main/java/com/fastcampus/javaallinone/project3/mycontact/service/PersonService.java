@@ -28,12 +28,11 @@ public class PersonService {
     @Transactional(readOnly = true)
     public Person getPerson(Long id) {
 //        Person person = personRepository.findById(id).get();
-        Person person = personRepository.findById(id).orElse(null);
+//        Person person = personRepository.findById(id).orElse(null);
 
-
-        //sout은 모든 실행을 다 보여주지만 log는 원하는것만 표시해준다.
-        log.info("person: {}", person);
-        return person;
+          //sout은 모든 실행을 다 보여주지만 log는 원하는것만 표시해준다.
+//        log.info("person: {}", person);
+        return personRepository.findById(id).orElse(null);
     }
 
     @Transactional
