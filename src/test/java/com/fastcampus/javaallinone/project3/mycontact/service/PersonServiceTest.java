@@ -2,26 +2,35 @@ package com.fastcampus.javaallinone.project3.mycontact.service;
 
 import com.fastcampus.javaallinone.project3.mycontact.domain.Person;
 import com.fastcampus.javaallinone.project3.mycontact.repository.PersonRepository;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
-@Transactional
-@SpringBootTest
+
+@ExtendWith(MockitoExtension.class)
 class personServiceTest {
-    @Autowired
+
+    //    @InjectMocks -- 테스트 대상이 되는 목
+    @InjectMocks
     private PersonService personService;
-    @Autowired
+    @Mock
     private PersonRepository personRepository;
 
 
+    //Mock 테스트는 전부를 보는게 아니라 부분부분을 파트로 나눠서 디테일하게 테스트할수 있게해준다.
+    //
     @Test
     void getPeopleByName(){
+        when(personRepository.findByName("martin"))
+                .thenReturn(Lists.newArrayList(new Person("martin")));
 
         List<Person> result = personService.getPeopleByName("martin");
 
@@ -29,10 +38,10 @@ class personServiceTest {
         assertThat(result.get(0).getName()).isEqualTo("martin");
     }
 
-    @Test
-    void getPerson(){
-        Person person = personService.getPerson(3L);
-        assertThat(person.getName()).isEqualTo("dennis");
-    }
+//    @Test
+//    void getPerson(){
+//        Person person = personService.getPerson(3L);
+//        assertThat(person.getName()).isEqualTo("dennis");
+//    }
 
 }
