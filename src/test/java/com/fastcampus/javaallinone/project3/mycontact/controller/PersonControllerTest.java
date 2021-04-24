@@ -12,11 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDate;
 
@@ -34,18 +34,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PersonControllerTest {
 
-    @Autowired
-    private PersonController personController;
+//    @Autowired
+//    private PersonController personController;
+//    @Autowired
+//    private MappingJackson2HttpMessageConverter messageConverter;
+//
+//    @Autowired
+//    private GlobalExceptionHandler globalExceptionHandler;
     @Autowired
     private PersonRepository personRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
 
+
+
     @Autowired
-    private MappingJackson2HttpMessageConverter messageConverter;
-
-
+    private WebApplicationContext wac;
 
 
     private MockMvc mockMvc;
@@ -53,8 +58,7 @@ class PersonControllerTest {
     @BeforeEach
     void beforeEach(){
         mockMvc = MockMvcBuilders
-                .standaloneSetup(personController)
-                .setMessageConverters(messageConverter)
+                .webAppContextSetup(wac)
                 .alwaysDo(print())
                 .build();
 
@@ -152,6 +156,7 @@ class PersonControllerTest {
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/api/person/10")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
                 .content(toJsonString(dto)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(400))
@@ -204,7 +209,7 @@ class PersonControllerTest {
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                 .content(toJsonString(dto)))
                 .andExpect(jsonPath("$.code").value(500))
-                .andExpect(jsonPath("$.message").value("알 수 없는 서버 오류가 발생하였습니다."));
+                .andExpect(jsonPath("$.message").value("알 수 없는 서버오류가 발생하였습니다."));
 
 
 
