@@ -139,6 +139,22 @@ class PersonControllerTest {
     }
 
 
+    //전체 Person 데이터를 가져오는 test
+    @Test
+    void getAll() throws Exception{
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/person")
+        .param("page","1")
+        .param("size","2"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalPages").value(3))
+                .andExpect(jsonPath("$.totalElements").value(6))
+                .andExpect(jsonPath("$.numberOfElements").value(2))
+        .andExpect(jsonPath("$.content.[0].name").value("dennis"))
+        .andExpect(jsonPath("$.content.[1].name").value("sophia"))
+;
+    }
+
 
 
 
