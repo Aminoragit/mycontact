@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(value="/api/person")
 @Slf4j
@@ -29,7 +31,7 @@ public class PersonController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void postPerson(@RequestBody PersonDto personDto) {
+    public void postPerson(@RequestBody @Valid PersonDto personDto) {
         personService.put(personDto);
 
 //        log.info("person -> {}" , personRepository.findAll());
