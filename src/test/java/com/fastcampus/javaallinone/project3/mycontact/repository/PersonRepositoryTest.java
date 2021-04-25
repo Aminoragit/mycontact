@@ -29,7 +29,7 @@ class PersonRepositoryTest {
                 () -> assertThat(person.getName()).isEqualTo("tony"),
                 () -> assertThat(person.getHobby()).isEqualTo("reading"),
                 () -> assertThat(person.getAddress()).isEqualTo("서울"),
-                () -> assertThat(person.getBirthday()).isEqualTo(Birthday.of(LocalDate.of(1991, 7, 10))),
+                () -> assertThat(person.getBirthday()).isEqualTo(Birthday.of(LocalDate.of(2021, 7, 10))),
                 () -> assertThat(person.getJob()).isEqualTo("officer"),
                 () -> assertThat(person.getPhoneNumber()).isEqualTo("010-2222-5555"),
                 () -> assertThat(person.isDeleted()).isEqualTo(false)
@@ -46,6 +46,7 @@ class PersonRepositoryTest {
     void findByMonthOfBirthday(){
         List<Person> people = personRepository.findByMonthOfBirthday(7);
 
+        System.out.println(people);
         assertThat(people.size()).isEqualTo(2);
         assertAll(
                 ()->assertThat(people.get(0).getName()).isEqualTo("david"),
@@ -53,17 +54,37 @@ class PersonRepositoryTest {
         );
     }
 
+
+
     @Test
     void findPeopleDeleted(){
         List<Person> people = personRepository.findPeopleDeleted();
-
         assertThat(people.size()).isEqualTo(1);
         assertThat(people.get(0).getName()).isEqualTo("andrew");
 
     }
 
+    @Test
+    void findByBirthday() {
+        Integer startDatetimeMonth = LocalDate.now().getMonthValue();//오늘 월월-일일
+        Integer startDatetimeDay = LocalDate.now().getDayOfMonth();//오늘 월월-일일
+        Integer endDateTimeMonth = LocalDate.now().plusDays(1).getMonthValue();
+        Integer endDateTimeDay = LocalDate.now().plusDays(1).getDayOfMonth();
 
+        List<Person> result = personRepository.findByBirthday(startDatetimeMonth,startDatetimeDay,endDateTimeMonth,endDateTimeDay);
+        System.out.println(result);
+        assertThat(result.size()).isEqualTo(2);
+        assertAll(
+                ()->assertThat(result.get(0).getName()).isEqualTo("hans"),
+                ()->assertThat(result.get(1).getName()).isEqualTo("hans2")
+        );
+        System.out.println(result);
+//        System.out.println(startDatetimeMonth);
+//        System.out.println(startDatetimeDay);
+//        System.out.println(endDateTimeMonth);
+//        System.out.println(endDateTimeDay);
 
+        }
 }
 
 

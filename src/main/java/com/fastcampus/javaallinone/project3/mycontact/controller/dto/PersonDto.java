@@ -20,5 +20,4 @@ public class PersonDto {
     private String job;
     private String phoneNumber;
 
-
 }

@@ -43,16 +43,10 @@ class PersonControllerTest {
 //    private GlobalExceptionHandler globalExceptionHandler;
     @Autowired
     private PersonRepository personRepository;
-
     @Autowired
     private ObjectMapper objectMapper;
-
-
-
     @Autowired
     private WebApplicationContext wac;
-
-
     private MockMvc mockMvc;
 
     @BeforeEach
@@ -67,8 +61,6 @@ class PersonControllerTest {
     @Order(1)
     void postPerson() throws Exception{
         PersonDto dto = PersonDto.of("martin","programming","판교",LocalDate.now(),"programmer","010-1111-2222");
-
-
         mockMvc.perform(
             MockMvcRequestBuilders.post("/api/person")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -89,6 +81,7 @@ class PersonControllerTest {
     }
 
 
+
     @Test
     @Order(2)
     void getPerson() throws Exception {
@@ -102,8 +95,15 @@ class PersonControllerTest {
             .andExpect(jsonPath("$.job").isEmpty())
             .andExpect(jsonPath("$.phoneNumber").isEmpty())
             .andExpect(jsonPath("$.deleted").value(false))
-            .andExpect(jsonPath("$.age").isNumber())
-            .andExpect(jsonPath("$.birthdayToday").isBoolean());
+        ;
+    }
+
+
+    @Test
+    void getPersonByBirthday() throws Exception{
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/person/birthday-friends"))
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -147,8 +147,8 @@ class PersonControllerTest {
         .param("page","1")
         .param("size","2"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.totalPages").value(3))
-                .andExpect(jsonPath("$.totalElements").value(6))
+                .andExpect(jsonPath("$.totalPages").value(4))
+                .andExpect(jsonPath("$.totalElements").value(8))
                 .andExpect(jsonPath("$.numberOfElements").value(2))
         .andExpect(jsonPath("$.content.[0].name").value("dennis"))
         .andExpect(jsonPath("$.content.[1].name").value("sophia"))
@@ -260,9 +260,6 @@ class PersonControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(400))
                 .andExpect(jsonPath("$.message").value("이름은 필수값입니다."));
-
-
-
     }
 
 

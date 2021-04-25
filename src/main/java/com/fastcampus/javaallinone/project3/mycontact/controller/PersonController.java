@@ -14,6 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value="/api/person")
@@ -25,8 +28,17 @@ public class PersonController {
     @Autowired
     private PersonRepository personRepository;
 
-//    @RequestMapping(method = RequestMethod.GET)
 
+    @ResponseBody
+    @GetMapping(path = "/birthday-friends")
+    public Map getBirthday() {
+        List<Person> jsonLst=personService.getPersonBirthday();
+
+        Map result = new HashMap();
+        result.put("items",jsonLst);
+        result.put("code","200");
+        return result;
+    }
 
     @GetMapping
     public Page<Person> getAll(@PageableDefault Pageable pageable){
@@ -37,6 +49,7 @@ public class PersonController {
     public Person getPerson(@PathVariable Long id){
         return personService.getPerson(id);
     }
+
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

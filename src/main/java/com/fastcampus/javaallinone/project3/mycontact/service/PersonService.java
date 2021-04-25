@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -27,6 +28,18 @@ public class PersonService {
 
         return personRepository.findByName(name);
     }
+
+    @Transactional
+    public List<Person> getPersonBirthday(){
+        //비교할값들
+        Integer startDatetimeMonth = LocalDate.now().getMonthValue();//오늘 월
+        Integer startDatetimeDay = LocalDate.now().getDayOfMonth();//오늘 일
+        Integer endDateTimeMonth = LocalDate.now().plusDays(1).getMonthValue(); //내일 월
+        Integer endDateTimeDay = LocalDate.now().plusDays(1).getDayOfMonth(); //내일 일
+        List<Person> result = personRepository.findByBirthday(startDatetimeMonth,startDatetimeDay,endDateTimeMonth,endDateTimeDay);
+        return result;
+    }
+
 
 
     @Transactional(readOnly = true)
@@ -82,4 +95,5 @@ public class PersonService {
     public Page<Person> getAll(Pageable pageable) {
         return personRepository.findAll(pageable);
     }
+
 }

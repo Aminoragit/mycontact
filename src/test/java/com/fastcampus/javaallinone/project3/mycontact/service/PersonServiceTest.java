@@ -37,9 +37,7 @@ class personServiceTest {
     private PersonRepository personRepository;
 
 
-
     //Mock 테스트는 전부를 보는게 아니라 부분부분을 파트로 나눠서 디테일하게 테스트할수 있게해준다.
-    //
     @Test
     void getPeopleByName(){
         when(personRepository.findByName("martin"))
@@ -49,6 +47,7 @@ class personServiceTest {
 
         assertThat(result.size()).isEqualTo(1);
         assertThat(result.get(0).getName()).isEqualTo("martin");
+
     }
 
     @Test
@@ -161,8 +160,6 @@ class personServiceTest {
         assertThat(result.getContent().get(0).getName()).isEqualTo("martin");
         assertThat(result.getContent().get(1).getName()).isEqualTo("dennis");
         assertThat(result.getContent().get(2).getName()).isEqualTo("tony");
-
-
     }
 
 

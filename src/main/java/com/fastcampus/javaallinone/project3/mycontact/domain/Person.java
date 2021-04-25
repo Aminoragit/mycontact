@@ -10,7 +10,6 @@ import org.springframework.util.StringUtils;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
-import java.time.LocalDate;
 
 //@RequiredArgsConstructor //Notnull 이여야하는 요소들 @Nonnull
 //@ToString //요소 추가시 자동으로 print 해주는 것에 추가해줌
@@ -38,7 +37,6 @@ public class Person {
 
     private String hobby;
 
-
     private String address;
 
     @Valid
@@ -51,6 +49,8 @@ public class Person {
 
     @ColumnDefault("0")
     private boolean deleted;
+
+
 
 
     public void set(PersonDto personDto){
@@ -69,24 +69,32 @@ public class Person {
         if(personDto.getBirthday()!=null){
             this.setBirthday(Birthday.of(personDto.getBirthday()));
         }
-
-
-
-
     }
 
-    public Integer getAge(){
-        if(this.birthday!= null){
-            return LocalDate.now().getYear() - this.birthday.getYearOfBirthday()+1;
-        }
-        else {
-            return null;
-        }
+    //    public Integer getAge(){
+//        if(this.birthday!= null){
+//            return LocalDate.now().getYear() - this.birthday.getYearOfBirthday()+1;
+//        }
+//        else {
+//            return null;
+//        }
+//    }
 
-    }
+//    public String getBirthday(){
+//        if(this.birthday!=null){
+//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd");
+//            String formattedString = LocalDate.of(this.birthday.getYearOfBirthday(),this.birthday.getMonthOfBirthday(),this.birthday.getDayOfBirthday()).format(formatter);//birthday의 값들중 MM-dd만 남김
+//            System.out.println(formattedString);
+//            return formattedString;
+//        }else{
+//            System.out.println("실행 안됨");
+//            return null;
+//        }
+//    }
+//
+//    public boolean isBirthdayToday(){
+//        return LocalDate.now().equals(LocalDate.of(this.birthday.getYearOfBirthday(),this.birthday.getMonthOfBirthday(),this.birthday.getDayOfBirthday()));
+//    }
 
-    public boolean isBirthdayToday(){
-        return LocalDate.now().equals(LocalDate.of(this.birthday.getYearOfBirthday(),this.birthday.getMonthOfBirthday(),this.birthday.getDayOfBirthday()));
 
-    }
 }
